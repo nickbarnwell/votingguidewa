@@ -1,0 +1,18 @@
+function = identifier param-list
+param-list = <'('> literal? (<space*> <','> <space*> literal)* <');'>
+<literal> = string-literal
+string-literal = <string-seperator>{graphic | space | escape-sequence | special}<string-seperator>
+<string-seperator> = '\'' | '"'
+escape-sequence = '\n' | '\r' 
+operator = '='
+<space> = #'(?s)(?m)\s'
+separator   = ';' | ',' | '.' | '(' | ')' | '{' | '}' | '[' | ']' 
+identifier   = id-start{id-start | numeric }
+<id-start>  = alphabetic | '$' | '_'
+<graphic>     = alphanumeric | special
+<special>      = '!' | '%' | '^' | '&' | '*' | '(' | ')' | '-' | '+' | '=' | '{' | '}' | '|' | '~' | '[' | ']' | '\\' | ';' | '\'' | ':' | '"' | '<' | '>' | '?' | ',' | '.' | '/' | '#' | '@' | '`' | '_'
+<alphanumeric> = alphabetic | numeric
+<numeric>      = #'[0-9]'
+<alphabetic> = lower-case | upper-case
+<upper-case>   = #'[A-Z]'
+<lower-case>   = #'[a-z]'

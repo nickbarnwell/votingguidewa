@@ -6,4 +6,5 @@
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [http-kit "2.1.5"]
                  [me.raynes/laser "1.1.1"]
-                 [instaparse "1.2.1"]])
+                 [instaparse "1.2.1"]
+                 [cheshire "5.2.0"]])

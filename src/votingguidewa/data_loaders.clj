@@ -1,15 +1,16 @@
 (ns votingguidewa.data-loaders
-  (:require [org.httpkit.client :as http]))
+  (:require [org.httpkit.client :as http]
+            [votingguidewa.util :refer :all]))
 
-(def BASE-URL "https://weiapplets.sos.wa.gov/MyVote/OnlineVotersGuide/")
-(def PRINTER-PARAM {"directLink" true})
+(def- BASE-URL "https://weiapplets.sos.wa.gov/MyVote/OnlineVotersGuide/")
+(def- PRINTER-PARAM {"directLink" true})
 
-(defn prep-args [args]
+(defn- prep-args [args]
   (if (coll? args)
     args
     [args]))
 
-(defn loader-fn [endpoint js-params ext-args]
+(defn- loader-fn [endpoint js-params ext-args]
   "Takes the JS function parameters as a vector of keyword arguments,
   the function parameters from the onclick as a vector, and any extra
   arguments passed to the function as a map of type <String, Object>
@@ -27,15 +28,14 @@
 
 
 
-(defn get-measure [id]
-  ((loader-fn  "MeasureDetail" ["measureId"] PRINTER-PARAM) id ))
+(defn- get-measure [id]
+  ((loader-fn  "MeasureDetail" ["measureId"] {}) id ))
 
-(defn get-candidate [params]
+(defn- get-candidate [params]
   ((loader-fn "GetCandidateStatement"
         ["candidateId", "electionId", "termFullLabel",
               "raceJurisdictionName", "countyDisplay", "IsPartisanOffice",
               "RaceName", "language", "partyName", "group"] PRINTER-PARAM) params))
-
 
 (defn get-resource [js-fn]
   (let [{fname :name params :params} js-fn]

@@ -15,12 +15,11 @@
     (fn record)))
 
 (defn create-static-data [id]
-  (create-dir-tree ["data" (str "data/" id "/candidates") (str "data/" id "/measures")])
-  (let [blob (into [] 
-                   (doall 
-                     (for [itm (s/get-ballot-info id) 
-                           :let [out (out-data itm)]]
-                       (do 
-                         (spit (out-path id out) (:html out))
-                         (:data out)))))]
+  (create-dir-tree ["data" (str "data/" id) (str "data/" id "/candidates") (str "data/" id "/measures")])
+  (let [blob (into []
+                   (doall
+                     (for [itm (s/get-ballot-info id)]
+                       (do
+                         (spit (out-path id itm) (:html itm))
+                         (:data itm)))))]
     (spit (str "data/" id "/data.json") (c/generate-string blob))))

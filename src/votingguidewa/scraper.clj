@@ -1,8 +1,9 @@
 (ns votingguidewa.scraper
   (:require [org.httpkit.client :as http]
             [me.raynes.laser :as l]
-            [votingguidewa.data-loaders :as data]
             [instaparse.core :as ip]
+            [votingguidewa.extractor :as e]
+            [votingguidewa.data-loaders :as data]
             [votingguidewa.util :refer :all])) 
 
 (def- BASE-URL "https://weiapplets.sos.wa.gov/MyVote/OnlineVotersGuide")
@@ -46,7 +47,7 @@
                           "BallotNameLink" 
                           "indentCandidate") 
                         (l/element= :a))))] 
-    (parse-results-page page parse-fn)))
+    (map e/candidate-static-data ((parse-results-page page parse-fn)))))
 
 (defn- extract-measures [page]
   (letfn [(parse-fn [d]
@@ -54,8 +55,14 @@
                       (l/child-of
                         (l/class= "TreeLevel2")
                         (l/element= :a))))]
-    (parse-results-page page parse-fn)))
+    (map e/measure-static-data (parse-results-page page parse-fn))))
 
+(defn- out-data [record]
+  (let [fn 
+        (if (:measure record)
+          e/measure-static-data
+          e/candidate-static-data)]
+    (fn record)))
 
 (defn get-ballot-info [election-id]
   (pmap data/get-resource (flatten (into []

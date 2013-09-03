@@ -17,7 +17,7 @@
    :type :candidate
    :listGroup (clean-val (md "RaceName"))
    :pivotGroup (md "group")
-   :subheader (clean-val (md "partyName")) 
+   :subheader (clean-val (md "partyName"))
    :header (-> (l/select (l/parse html) (l/class= "BallotName")) first :content first clean-val)
   })
 
@@ -28,9 +28,9 @@
   (let [html (request-html c)
         parsed (l/parse html)
         header [(l/node :h1 :content (:header data)) (l/node :h2 :content (:subheader data))]
-        content (-> (l/select parsed (l/element= :p)) first ) 
+        content (-> (l/select parsed (l/element= :p)) first )
         data-table (-> (l/select parsed (l/element= :table)) last)]
-    (l/document html-template 
+    (l/document html-template
                 (l/id= "header") (l/content header)
                 (l/id= "main") (l/content content)
                 (l/id= "footer") (l/content data-table))))
@@ -44,6 +44,6 @@
 ;---- Measure Extraction ----;
 
 (defn measure-static-data [m]
-  (clojure.pprint/pprint m)
-  (let [raw-html (request-html m)]
-  {:measure true :data {:id (Integer/parseInt (-> m :metadata (get "measureId")))} :html raw-html}))
+  (let [raw-html (request-html m)
+        json {:id (do  1)}]
+    {:measure true :data json :html raw-html}))
